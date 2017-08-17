@@ -1,0 +1,62 @@
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background: #e0e0e0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: #0088cc;
+      font-size: 16px;
+    }
+    #startButton {
+        margin: 30px auto;
+        width: 180px;
+        border-radius: 5px;
+        box-shadow: 0 4px 0 #e91b0c;
+        background: #f44336;
+        color: #fff;
+        cursor: pointer;
+        padding: 7px;
+    }
+    #stopButton {
+        margin: 30px auto;
+        width: 180px;
+        border-radius: 5px;
+        box-shadow: 0 4px 0 #e91b0c;
+        background: #f44336;
+        color: #fff;
+        cursor: pointer;
+        padding: 7px;
+    }
+    #startButton:hover {
+        opacity: 0.8;
+    }
+    #startButton.pushed {
+        margin-top: 32px;
+        box-shadow: 0 2px 0 #e91b0c;
+    }
+    .btn {
+        position: relative;
+        display: inline-block;
+        width: 40px auto;
+        padding: 7px;
+        border-radius: 5px;
+        color: #fff;
+        background: #00aaff;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+    .btn:hover {
+        color: black;
+    }
+    .btn + .btn {
+        margin-left: 10px;
+    }
+    .btn.inactive {
+        opacity: 0.5;
+    }
+  </style>
+</head>
+
+</html>
