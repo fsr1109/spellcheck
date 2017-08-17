@@ -1,6 +1,6 @@
 <?php
 
-var_dump("hi");
+var_dump("hi ai");
 // phpinfo();
 
 $url = "https://language.googleapis.com/v1/documents:analyzeEntities?key=AIzaSyAyUYw5dNLkjbZkigq26oX0Lu0ESGP2gJ8";
