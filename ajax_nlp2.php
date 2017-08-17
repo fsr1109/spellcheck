@@ -1,23 +1,16 @@
 
+
 <?php
 
 
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  var_dump($_SERVER);
-  var_dump($_POST["last_name"]);
-
-  $key = "AIzaSyAyUYw5dNLkjbZkigq26oX0Lu0ESGP2gJ8";
-  $url = "https://language.googleapis.com/v1/documents:analyzeEntities?key=".$key;
-  var_dump($url);
-
-  // var_dump("hello");
-  // var_dump($_POST);
-  // var_dump($_POST['document']);
-  // var_dump($_POST['content']);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  var_dump("hello");
+  var_dump($_POST);
+  var_dump($_POST['document']);
+  var_dump($_POST['content']);
 
 
-if (!empty($_POST[""]) && !empty($_POST["last_name"])) {
+  if (!empty($_POST[""]) && !empty($_POST["last_name"])) {
     $fullName = $_POST["last_name"] . " " . $_POST["first_name"];
   } else {
     $lastName = $_POST["last_name"];
@@ -27,22 +20,33 @@ if (!empty($_POST[""]) && !empty($_POST["last_name"])) {
 }
 
 
-// // //$content =  htmlspecialchars($_GET["data"]);
-// //
-// // // $content =  $_GET["data"];
-// // $content = {
-// //   "data": ""
-// //   // "data": text
-// // };
-// // $content = array('data'=>'A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons.');
+// var_dump($_POST);
+
+
+$key = "AIzaSyAyUYw5dNLkjbZkigq26oX0Lu0ESGP2gJ8";
+$url = "https://language.googleapis.com/v1/documents:analyzeEntities?key=".$key;
+// var_dump($url);
+// //$url ="https://language.googleapis.com/v1/documents:analyzeEntities";
+//        //https://language.googleapis.com/v1/documents:analyzeEntities
+// //var_dump($_GET["data"]);
+// //var_dump("hello");
+// //$content = "Japan%27s%20Defense%20Ministry%20has%20decided%20to%20consider%20introducing%20a%20new%20US%2dmade%20missile%20defense%20system%20known%20as%20%27Aegis%20Ashore%27%20in%20light%20of%20progress%20in%20North%20Korea%27s%20missile%20development%2e%0d%0aJapan%20is%20prepared%20for%20North%20Korea%27s%20possible%20launches%20of%20ballistic%20missiles%20by%20deploying%20a%20destroyer%20equipped%20with%20the%20Aegis%20advanced%20radar%20system%20and%20PAC3%20interceptor%20missile%20units%2e%20The%20Aegis%20advanced%20radar%20system%20is%20designed%20to%20intercept%20a%20missile%20outside%20the%20atmosphere%20and%20a%20land%2dbased%20PAC%203%20system%20is%20capable%20of%20intercepting%20a%20missile%20entering%20the%20atmosphere%2e%0d%0a";
+// //$content =  htmlspecialchars($_GET["data"]);
 //
-// $content = 'A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons.';
-//
-// // var_dump($content);
-//
-// $document = array('type' =>'PLAIN_TEXT','language' =>'en','content' => $content);
-// $postdata = array('encodingType' => 'UTF8', 'document' => $document);
-// $json_post = json_encode($postdata);
+// // $content =  $_GET["data"];
+// $content = {
+//   "data": "A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons."
+//   // "data": text
+// };
+// $content = array('data'=>'A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons.');
+
+$content = 'A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons.';
+
+// var_dump($content);
+
+$document = array('type' =>'PLAIN_TEXT','language' =>'en','content' => $content);
+$postdata = array('encodingType' => 'UTF8', 'document' => $document);
+$json_post = json_encode($postdata);
 // $ch = curl_init($url);
 
 // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -81,9 +85,9 @@ if (!empty($_POST[""]) && !empty($_POST["last_name"])) {
 </head>
 <body>
 <h1>フォームデータの送信</h1>
-<form action="" method="post">
-  <input type ="text" value ="A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons." name="last_name">
-  <input type = "submit" value ="送信">
+<form action = "ajax_nlp2.php" method = "post">
+
+<input type = "submit" value ="送信">
 </form>
 </body>
 </html>
