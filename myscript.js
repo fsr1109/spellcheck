@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 
 
 (function(){
 
+=======
+      var msg = new SpeechSynthesisUtterance();
+>>>>>>> parent of 74105d3... Fixed html
       var repeatArray = new Array();
       var repeatArrayCount = 0;
       var repeatString;
@@ -13,6 +17,7 @@
       var positionOfWorryWord = new Array();
       var whichPlayMode = "FULL";
 
+<<<<<<< HEAD
       var msg = new SpeechSynthesisUtterance();
 
 
@@ -44,23 +49,29 @@
 
       //================================================  Button event
 
+=======
+>>>>>>> parent of 74105d3... Fixed html
       var startButton = document.getElementById('startButton');
       var stopButton = document.getElementById('stopButton');
 
-      startButton.addEventListener('click', function() {
-        whichPlayMode="FULL";
-        modeCall(0, 1);
-        setTimeout( function() {
-          firstStep(document.getElementById('newTextArea').value);
-        }, 1000 );
-      });
 
-      stopButton.addEventListener('click', function() {
-        stop();
-      });
+        startButton.addEventListener('click', function() {
+          whichPlayMode="FULL";
+          modeCall(0, 1);
+          setTimeout( function() {
+            firstStep(document.getElementById('newTextArea').value);
+          }, 1000 );
+        });
 
+<<<<<<< HEAD
       //================================================  Shortcut
+=======
+        stopButton.addEventListener('click', function() {
+          stop();
+        });
+>>>>>>> parent of 74105d3... Fixed html
 
+        //全文
       shortcut.add("shift+enter",function() {
         whichPlayMode="FULL";
         modeCall(0, 1);
@@ -69,7 +80,7 @@
         }, 1000 );
       });
 
-      shortcut.add("shift+s",function() {
+      shortcut.add("shift+s",function() {       
           stop();
       });
 
@@ -85,6 +96,7 @@
         }, 1000 );
       });
 
+<<<<<<< HEAD
       //================================================  init()
 
       //音声初期設定
@@ -94,11 +106,16 @@
             alert('Web Speech API には未対応です.');
             return;
         }
+=======
+      //音声初期設定
+      function voiceLoad(){
+>>>>>>> parent of 74105d3... Fixed html
         // win32 / MacIntel /
         console.log(window.navigator.platform);
         if(msg.voice == null){
           console.log("初回終了");
         }
+<<<<<<< HEAD
         playSound("Hello world");
       }
 
@@ -132,6 +149,9 @@
 
             }
             speechSynthesis.speak(msg);
+=======
+        playSound("");
+>>>>>>> parent of 74105d3... Fixed html
       }
 
       var wordObjList = [];
@@ -147,6 +167,7 @@
         this.text = text;
         this.num = num;
       }
+
 
       function firstStep(text){
         repeatArray.length = 0;
@@ -168,18 +189,18 @@
 
         //console.log("全 "+allWord.length+" ワード");
 
-        //単語検索
+        //単語検索  
         // for(var i = 0; i < allWord.length; i++){
         //   wordObjList[i] = new wordObject(allWord[i], wordTransform(allWord[i]), i, "yet");
         //   googleNLP(wordObjList[i].wordOriginal);
         //   //getList('EJdict',wordObjList[i].wordChanged,i);
-
+          
         // }
       }
 
       function wordTransform(_txt){
-         for (var i = 0; i < _txt.length; i++) {
-            if(_txt[_txt.length-1] == "."
+         for (var i = 0; i < _txt.length; i++) {  
+            if(_txt[_txt.length-1] == "." 
                || _txt[_txt.length-1] ==  '!'
                || _txt[_txt.length-1] ==  '?'
                || _txt[_txt.length-1] ==  ','
@@ -189,12 +210,12 @@
                || _txt[_txt.length-1] ==  ')'
                || _txt[_txt.length-1] ==  '['
                || _txt[_txt.length-1] ==  ']'
-               || _txt[_txt.length-1] ==  '\"'
+               || _txt[_txt.length-1] ==  '\"' 
                || _txt[_txt.length-1] ==  '\n'){
-               // || _txt[_txt.length-1] ==  's'
+               // || _txt[_txt.length-1] ==  's' 
                // || _txt[_txt.length-1] ==  'd'
                // || _txt[_txt.length-1] ==  'e'){
-
+              
               //console.log("複数形 -> "+_txt+" -> "+_txt.substr( 0, _txt.length-1 ));
               _txt = _txt.substr( 0, _txt.length-1);
              //要素を削除したため、一個前に戻るべき
@@ -225,7 +246,7 @@
               }
           };
           if(mode==0){
-            msg.text = "全文再生";
+            msg.text = "全文再生"; 
           }else if(mode==1){
             msg.text = "訂正なし";
           }else if(mode==2){
@@ -252,14 +273,14 @@
           }
           var voi = speechSynthesis.getVoices();
           msg.voice = voi[11];
-          msg.text = text+"ワードです";
+          msg.text = text+"ワードです"; 
           msg.onend = function (event) {
               console.log("再生終了");
           }
           speechSynthesis.speak(msg);
       }
 
-
+      
       function googleNLP(text){
 
           var content = {
@@ -280,11 +301,11 @@
             var wordSplit = "";
 
             for(var i = 0; i < allWord.length; i++){
-
+              
               wordSplit = allWord[i].split("&fsr&");
-
+              
               if(wordSplit[0]!= undefined && wordSplit[1] != undefined){
-
+                 
 
                 //console.log(wordSplit[0] + " - " + wordSplit[1]);
 
@@ -301,10 +322,10 @@
                 allWordSize--;
               }
                 //console.log(wordObjList[i]);
-
+              
                //googleNLP(wordObjList[i].wordOriginal);
-
-
+                
+          
             }
 
             //allWordSize = allWord.length;
@@ -322,11 +343,11 @@
         //     var wordSplit = "";
 
         //     for(var i = 0; i < allWord.length; i++){
-
+              
         //       wordSplit = allWord[i].split("&fsr&");
-
+              
         //       if(wordSplit[0]!= undefined && wordSplit[1] != undefined){
-
+                 
 
         //         //console.log(wordSplit[0] + " - " + wordSplit[1]);
 
@@ -343,10 +364,10 @@
         //         allWordSize--;
         //       }
         //         //console.log(wordObjList[i]);
-
+              
         //        //googleNLP(wordObjList[i].wordOriginal);
-
-
+                
+          
         //     }
 
         //     //allWordSize = allWord.length;
@@ -410,7 +431,7 @@
                         wordObjList[_num].rightOrWrong = "X";
                                       //console.log(wordObjList[_num].wordOriginal+" - "+wordObjList[_num].wordChanged+" - "+wordObjList[_num].num+" - "+wordObjList[_num].rightOrWrong);
 
-
+         
 
                       }
 
@@ -444,14 +465,14 @@
       //文に結合
       function addToRepeatString(){
 
-
+        
 
 
          reString = "";
         textObjList.length = 0;
 
 
-         for (var i = 0; i < wordObjList.length; i++) {
+         for (var i = 0; i < wordObjList.length; i++) {          
 
           if(wordObjList[i].rightOrWrong=="X"){
             if(wordObjList[i].num == 0){
@@ -465,22 +486,22 @@
             }
             countForTextObj++;
             reString = "";
-
+          
           }else{
             reString += wordObjList[i].wordOriginal+" ";
 
             if(i == wordObjList.length-1){
               textObjList[countForTextObj] = new textObject(reString, 10000);
               countForTextObj = 0;
-              reString = "";
+              reString = ""; 
             }
           }
-
+          
         }
 
         var countTheNumOfWrongWord = 0;
 
-        for (var i = 0; i < wordObjList.length; i++) {
+        for (var i = 0; i < wordObjList.length; i++) { 
           if(wordObjList[i].rightOrWrong=="X"){
             createButton(wordObjList[i].num);
             countTheNumOfWrongWord++;
@@ -518,7 +539,7 @@
 
       function playSoundwithWord(text){
 
-
+          
         // unsupported.
             if (!'SpeechSynthesisUtterance' in window) {
                 alert('Web Speech API には未対応です.');
@@ -537,13 +558,13 @@
             msg.voice = voi[4];
 
 
-            //Mac
+            //Mac 
             // msg.voice = voi[65];
 
             if(wordObjList[repeatCount].rightOrWrong == "X"){
               msg.text = wordObjList[repeatCount].wordOriginal.split('');
             }else{
-              msg.text = '.';
+              msg.text = '.'; 
             }
 
             console.log(msg.text);
@@ -584,7 +605,7 @@
             for (var i = 0; i < wordObjList.length; i++) {
               //if(existenceCheckArray[i] == "X" && allWord[i] != ""){
               if(wordObjList[i].rightOrWrong=="X"){
-                buttons.push(createButton(i));
+                buttons.push(createButton(i)); 
               }
             }
             for(var i = 0; i < buttons.length; i++){
@@ -601,14 +622,14 @@
             for (var i = 0; i < btns.length; i++) {
                 btns[i].className = 'btn';
             }
-
+      
 
         function createButton(num) {
             var button;
             button = document.createElement('div');
             button.className = 'btn hidden';
 
-
+            
             button.style.background = "red";
 
 
@@ -622,6 +643,7 @@
             return button;
         }
 
+
         function changeBoard(n){
           for(var i = 0; i < board.childNodes.length; i++){
             //console.log(board.childNodes[i]);
@@ -632,8 +654,50 @@
           }
           //initBoard();
         }
+        
+      //音声を再生
+      function playSound(text) {
+            // unsupported.
+            if (!'SpeechSynthesisUtterance' in window) {
+                alert('Web Speech API には未対応です.');
+                return;
+            }
 
+            var voi = speechSynthesis.getVoices();
 
+            for (var i = 0; i < 10; i++) {
+                if(voi[i].lang=="en-US"){
+                  msg.voice = voi[i];
+                }
+            };
+
+            //Mac 
+            // msg.voice = voi[65];
+
+            if(textObjList[repeatCount].num != 10000 && text.split(" ").length == 1){
+              msg.text = textObjList[repeatCount].text.split('');
+              msg.voice = voi[4];
+            }else{
+              msg.text = text; 
+            }
+
+            console.log(msg.text);
+
+            msg.onend = function (event) {
+              if(repeatCount < textObjList.length-1){
+                repeatCount++;
+                playSound(textObjList[repeatCount].text);
+                //initialBoard
+
+              }else{
+                console.log("fullTextの再生終了");
+                repeatCount = 0;
+                //initialborad; いらんかも
+              }
+
+            }
+            speechSynthesis.speak(msg);
+      }
 
       function whenPlaySound(num, word){
 
@@ -649,7 +713,7 @@
           changeBoard(whichWord);
       }
 
-
+      
 
       function stop(){
         speechSynthesis.cancel();
@@ -680,6 +744,3 @@
         }
 
         //googleNLP();
-        // voiceLoad();
-        init();
-})();
