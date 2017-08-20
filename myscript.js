@@ -2,16 +2,45 @@
 
 (function(){
 
-      var msg = new SpeechSynthesisUtterance();
       var repeatArray = new Array();
       var repeatArrayCount = 0;
       var repeatString;
+      var repeatCount = 0;
       var allWord;
       var allWordSize;
       var existenceCheckArray = new Array();
       var checkRepeatArray = new Array();
       var positionOfWorryWord = new Array();
       var whichPlayMode = "FULL";
+
+      var msg = new SpeechSynthesisUtterance();
+
+
+      function populateVoiceList() {
+        if(typeof speechSynthesis === 'undefined') {
+          return;
+        }
+
+        voices = speechSynthesis.getVoices();
+
+        for(i = 0; i < voices.length ; i++) {
+          var option = document.createElement('option');
+          option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+          if(voices[i].default) {
+            option.textContent += ' -- DEFAULT';
+          }
+
+          option.setAttribute('data-lang', voices[i].lang);
+          option.setAttribute('data-name', voices[i].name);
+          document.getElementById("voiceSelect").appendChild(option);
+        }
+      }
+
+      populateVoiceList();
+      if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+          speechSynthesis.onvoiceschanged = populateVoiceList;
+      }
 
       //================================================  Button event
 
@@ -30,7 +59,7 @@
         stop();
       });
 
-      //================================================  全文
+      //================================================  Shortcut
 
       shortcut.add("shift+enter",function() {
         whichPlayMode="FULL";
@@ -56,11 +85,15 @@
         }, 1000 );
       });
 
-      //================================================  function
+      //================================================  init()
 
       //音声初期設定
-      // function voiceLoad(){
       function init(){
+
+        if (!'SpeechSynthesisUtterance' in window) {
+            alert('Web Speech API には未対応です.');
+            return;
+        }
         // win32 / MacIntel /
         console.log(window.navigator.platform);
         if(msg.voice == null){
@@ -71,21 +104,9 @@
 
       //音声を再生
       function playSound(text) {
-            // unsupported.
-            if (!'SpeechSynthesisUtterance' in window) {
-                alert('Web Speech API には未対応です.');
-                return;
-            }
 
-            var voi = speechSynthesis.getVoices();
-
-            for (var i = 0; i < 10; i++) {
-                if(voi[i].lang=="en-US"){
-                  msg.voice = voi[i];
-                }
-            };
-
-            //Mac
+            // msg.lang = "en-US"
+            // //Mac
             // msg.voice = voi[65];
 
             if(textObjList[repeatCount].num != 10000 && text.split(" ").length == 1){
