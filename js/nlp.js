@@ -2,10 +2,8 @@
 function googleNLP(text){
 
     var content = {
-
       // "data": "A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons."
       "data": text
-
     }
 
     $.get('ajax_nlp2.php',content, function(data) {

@@ -1,77 +1,31 @@
-
-(function(){
-
+      var msg = new SpeechSynthesisUtterance();
       var repeatArray = new Array();
       var repeatArrayCount = 0;
       var repeatString;
-      var repeatCount = 0;
       var allWord;
       var allWordSize;
       var existenceCheckArray = new Array();
       var checkRepeatArray = new Array();
       var positionOfWorryWord = new Array();
       var whichPlayMode = "FULL";
-      var browser;
-      var wordObjList = [];
-      var msg = new SpeechSynthesisUtterance();
-
-      msg.onend = function (event) {
-        if(repeatCount < textObjList.length-1){
-          repeatCount++;
-          playSound(textObjList[repeatCount].text);
-          //initialBoard
-        }else{
-          console.log("fullTextの再生終了");
-          repeatCount = 0;
-          //initialborad; いらんかも
-        }
-      }
-
-      //================================================  Menu
-
-      function populateVoiceList(){
-        if(typeof speechSynthesis === 'undefined') {
-          return;
-        }
-
-        voices = speechSynthesis.getVoices();
-        var flag = true;
-        for(i = 0; i < voices.length ; i++) {
-          var option = document.createElement('option');
-          option.textContent = voices[i].name+':'+voices[i].lang;
-          if(voices[i].lang == "en-US") {
-            if(flag){
-              option.selected = true;
-              flag = false;
-            }
-            option.setAttribute('data-lang', voices[i].lang);
-            option.setAttribute('data-name', voices[i].name);
-            option.setAttribute('value', i);
-            document.getElementById("voiceSelect").appendChild(option);
-          }
-        } // for
-      }
-
-      //================================================  Button event
 
       var startButton = document.getElementById('startButton');
       var stopButton = document.getElementById('stopButton');
 
-      startButton.addEventListener('click', function() {
-        whichPlayMode="FULL";
-        // playSound();
-        modeCall(0, 1);
-        // setTimeout( function() {
-          firstStep(document.getElementById('newTextArea').value);
-        // }, 1000 );
-      });
 
-      stopButton.addEventListener('click', function() {
-        stop();
-      });
+        startButton.addEventListener('click', function() {
+          whichPlayMode="FULL";
+          modeCall(0, 1);
+          setTimeout( function() {
+            firstStep(document.getElementById('newTextArea').value);
+          }, 1000 );
+        });
 
-      //================================================  Shortcut
+        stopButton.addEventListener('click', function() {
+          stop();
+        });
 
+        //全文
       shortcut.add("shift+enter",function() {
         whichPlayMode="FULL";
         modeCall(0, 1);
@@ -96,62 +50,17 @@
         }, 1000 );
       });
 
-      //================================================  init()
-
       //音声初期設定
       function voiceLoad(){
-        checkStatus();
         // win32 / MacIntel /
-        browser = window.navigator.platform;
-        console.log(browser);
-
+        console.log(window.navigator.platform);
         if(msg.voice == null){
           console.log("初回終了");
         }
-
-        populateVoiceList();
-        if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = populateVoiceList;
-        }
-        // playSound();
+        playSound("");
       }
 
-      //音声を再生
-      function playSound() {
-        checkStatus();
-
-        var text = document.getElementById('newTextArea').value.trim();
-        msg.text = text;
-        console.log(msg.text);
-
-        var select = document.getElementById("voiceSelect");
-        var options = select.options;
-
-        var voi = speechSynthesis.getVoices();
-        // selectedのoptionを探す
-        for(var i=0; i<options.length; i++){
-            var option = options[i];
-            if (option.selected){
-                var num = Number(option.value);
-                msg.voice = voi[num];
-            }
-        }
-        console.log(msg.voice);
-
-        speechSynthesis.speak(msg);
-      }
-
-      function firstStep(text){
-        repeatArray.length = 0;
-        existenceCheckArray.length = 0;
-        wordObjList.length = 0;
-
-        allWord = "";
-        repeatString = "";
-        repeatCount = 0;
-
-        googleNLP(text);
-      }
+      var wordObjList = [];
 
       function wordObject(wordOriginal, wordChanged, num, rightOrWrong){
         this.wordOriginal = wordOriginal;
@@ -163,6 +72,36 @@
       function textObject(text, num){
         this.text = text;
         this.num = num;
+      }
+
+
+      function firstStep(text){
+        repeatArray.length = 0;
+        existenceCheckArray.length = 0;
+        wordObjList.length = 0;
+
+       // console.log("Reset - "+textObjList);
+        allWord = "";
+        repeatString = "";
+        repeatCount = 0;
+
+        googleNLP(text);
+
+        //半角スペースで単語ごとに分ける
+        //allWord = text.split(" ");
+        //単語数
+        //allWordSize = allWord.length;
+        //repeatArrayCount = 0;
+
+        //console.log("全 "+allWord.length+" ワード");
+
+        //単語検索
+        // for(var i = 0; i < allWord.length; i++){
+        //   wordObjList[i] = new wordObject(allWord[i], wordTransform(allWord[i]), i, "yet");
+        //   googleNLP(wordObjList[i].wordOriginal);
+        //   //getList('EJdict',wordObjList[i].wordChanged,i);
+
+        // }
       }
 
       function wordTransform(_txt){
@@ -195,11 +134,185 @@
 
 
 
+
+
+
+
+      //FUll Call
+      function modeCall(mode, num){
+          // unsupported.
+          if (!'SpeechSynthesisUtterance' in window) {
+              alert('Web Speech API には未対応です.');
+              return;
+          }
+          var voi = speechSynthesis.getVoices();
+          for (var i = 0; i < 20; i++) {
+              if(voi[i].lang=="ja-JP"){
+                msg.voice = voi[i];
+              }
+          };
+          if(mode==0){
+            msg.text = "全文再生";
+          }else if(mode==1){
+            msg.text = "訂正なし";
+          }else if(mode==2){
+            msg.text = num+"単語";
+          }else if(mode==3){
+            msg.text = "単語再生";
+          }else if(mode==4){
+            msg.text = "再生終了";
+          }else if(mode ==5){
+            msg.text = "誤りが"+num+"箇所あります";
+          }
+          msg.onend = function (event) {
+              // console.log("再生終了");
+          }
+          speechSynthesis.speak(msg);
+      }
+
+      //ワード数をカウントする
+      function wordCount(text){
+          // unsupported.
+          if (!'SpeechSynthesisUtterance' in window) {
+              alert('Web Speech API には未対応です.');
+              return;
+          }
+          var voi = speechSynthesis.getVoices();
+          msg.voice = voi[11];
+          msg.text = text+"ワードです";
+          msg.onend = function (event) {
+              console.log("再生終了");
+          }
+          speechSynthesis.speak(msg);
+      }
+
+
+      function googleNLP(text){
+
+          var content = {
+
+            // "data": "A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons."
+            "data": text
+
+          }
+
+          $.get('ajax_nlp2.php',content, function(data) {
+          //$('#result').html(data);
+            //console.log(data);
+
+            allWord = data.split("/fsr/");
+            allWordSize = allWord.length;
+            console.log(allWordSize);
+
+            var wordSplit = "";
+
+            for(var i = 0; i < allWord.length; i++){
+
+              wordSplit = allWord[i].split("&fsr&");
+
+              if(wordSplit[0]!= undefined && wordSplit[1] != undefined){
+
+
+                //console.log(wordSplit[0] + " - " + wordSplit[1]);
+
+                wordSplit[0] = wordSplit[0].slice(1);
+                wordSplit[0] = wordSplit[0].slice(0, -1);
+
+                wordSplit[1] = wordSplit[1].slice(1);
+                wordSplit[1] = wordSplit[1].slice(0, -1);
+
+                wordObjList[i] = new wordObject(wordSplit[0], wordSplit[1], i, "yet");
+                getList('EJdict',wordObjList[i].wordChanged,i);
+                console.log(i+" - "+wordObjList[i].wordOriginal);
+              }else{
+                allWordSize--;
+              }
+                //console.log(wordObjList[i]);
+
+               //googleNLP(wordObjList[i].wordOriginal);
+
+
+            }
+
+            //allWordSize = allWord.length;
+            //repeatArrayCount = 0;
+          });
+
+        // $.get('ajax_nlp.php',content, function(data) {
+        //   //$('#result').html(data);
+        //     //console.log(data);
+
+        //     allWord = data.split("/fsr/");
+        //     allWordSize = allWord.length;
+        //     console.log(allWordSize);
+
+        //     var wordSplit = "";
+
+        //     for(var i = 0; i < allWord.length; i++){
+
+        //       wordSplit = allWord[i].split("&fsr&");
+
+        //       if(wordSplit[0]!= undefined && wordSplit[1] != undefined){
+
+
+        //         //console.log(wordSplit[0] + " - " + wordSplit[1]);
+
+        //         wordSplit[0] = wordSplit[0].slice(1);
+        //         wordSplit[0] = wordSplit[0].slice(0, -1);
+
+        //         wordSplit[1] = wordSplit[1].slice(1);
+        //         wordSplit[1] = wordSplit[1].slice(0, -1);
+
+        //         wordObjList[i] = new wordObject(wordSplit[0], wordSplit[1], i, "yet");
+        //         getList('EJdict',wordObjList[i].wordChanged,i);
+        //         console.log(i+" - "+wordObjList[i].wordOriginal);
+        //       }else{
+        //         allWordSize--;
+        //       }
+        //         //console.log(wordObjList[i]);
+
+        //        //googleNLP(wordObjList[i].wordOriginal);
+
+
+        //     }
+
+        //     //allWordSize = allWord.length;
+        //     //repeatArrayCount = 0;
+        //   });
+
+          //console.log("-> "+text);
+
+        // $.ajax({
+        //       type: "GET",
+        //       url: "ajax_nlp.php",
+        //       data: encodeURI("A record number of high school students across Japan have signed a petition addressed to the United Nations calling for the abolition of nuclear weapons."),
+        //       //dataType: 'json',
+        //       cache: false,
+        //       //timeout: 5000,
+        //       success: function(data) {
+        //         console.log(data);
+        //         data = JSON.parse(data);
+        //         console.log(data['sentences']);
+        //         console.log(data['tokens']);
+
+        //       },
+        //       error: function(XMLHttpRequest, textStatus, errorThrown){
+        //           console.log("-------------");
+        //            console.log(XMLHttpRequest);
+        //            console.log(textStatus);
+        //            console.log(errorThrown);
+        //       }
+        //   });
+      }
+
+
       var nowdic = 'EJdict';
       //単語の検索
       function getList(_dic,_txt,_num){
         //候補数
           var howMany = 0;
+
+
 
           var reqPath = "http://public.dejizo.jp/NetDicV09.asmx/SearchDicItemLite?Dic="+nowdic+"&Word="+encodeURI(_txt)+"&Scope=HEADWORD&Match=CONTAIN&Merge=AND&Prof=XHTML&PageSize=20&PageIndex=0";
           //console.log(reqPath);
@@ -257,6 +370,9 @@
 
       //文に結合
       function addToRepeatString(){
+
+
+
 
          reString = "";
         textObjList.length = 0;
@@ -328,7 +444,13 @@
       }
 
       function playSoundwithWord(text){
-        checkStatus();
+
+
+        // unsupported.
+            if (!'SpeechSynthesisUtterance' in window) {
+                alert('Web Speech API には未対応です.');
+                return;
+            }
 
             var voi = speechSynthesis.getVoices();
 
@@ -437,6 +559,50 @@
             }
           }
           //initBoard();
+        }
+
+      //音声を再生
+      function playSound(text) {
+            // unsupported.
+            if (!'SpeechSynthesisUtterance' in window) {
+                alert('Web Speech API には未対応です.');
+                return;
+            }
+
+            var voi = speechSynthesis.getVoices();
+
+            for (var i = 0; i < 10; i++) {
+                if(voi[i].lang=="en-US"){
+                  msg.voice = voi[i];
+                }
+            };
+
+            //Mac
+            // msg.voice = voi[65];
+
+            if(textObjList[repeatCount].num != 10000 && text.split(" ").length == 1){
+              msg.text = textObjList[repeatCount].text.split('');
+              msg.voice = voi[4];
+            }else{
+              msg.text = text;
+            }
+
+            console.log(msg.text);
+
+            msg.onend = function (event) {
+              if(repeatCount < textObjList.length-1){
+                repeatCount++;
+                playSound(textObjList[repeatCount].text);
+                //initialBoard
+
+              }else{
+                console.log("fullTextの再生終了");
+                repeatCount = 0;
+                //initialborad; いらんかも
+              }
+
+            }
+            speechSynthesis.speak(msg);
       }
 
       function whenPlaySound(num, word){
@@ -452,6 +618,8 @@
 
           changeBoard(whichWord);
       }
+
+
 
       function stop(){
         speechSynthesis.cancel();
@@ -479,7 +647,6 @@
           document.getElementById('newTextArea').value = stringChange;
 
           changeBoard(whichWord);
-      }
+        }
+
         //googleNLP();
-      voiceLoad();
-}());
