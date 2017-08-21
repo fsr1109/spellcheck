@@ -1,11 +1,16 @@
 <?php
 // phpinfo();
 
+// API Key
 $key = "AIzaSyAyUYw5dNLkjbZkigq26oX0Lu0ESGP2gJ8";
-$url = "https://language.googleapis.com/v1/documents:analyzeEntities?key=".$key;
-var_dump($url);
+// Google Request
+$url = "https://language.googleapis.com/v1/documents:analyzeSyntax?key=".$key;
+// var_dump($url);
+$content =  htmlspecialchars($_GET["data"]);
+if(empty($content)){
+  $content ="How to write a Google Home survey chatbot.";
+}
 
-$content ="How to write a Google Home survey chatbot.";
 $document = array(
   'type' =>'PLAIN_TEXT',
   'language' =>'en',
@@ -14,7 +19,7 @@ $document = array(
 
 $postdata = array('encodingType' => 'UTF8', 'document' => $document);
 $json_post = json_encode($postdata);
-var_dump($json_post);
+// var_dump($json_post);
 
 // 新しい cURL リソースを作成します
 $ch = curl_init();
@@ -28,10 +33,16 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $json_post);
 $result = curl_exec($ch);
 // // cURL リソースを閉じ、システムリソースを解放します
 curl_close($ch);
-$result_array = json_decode($result,true);
+$result_array = json_decode($result, true);
+
+header('Content-type: application/json');
+echo json_encode($result_array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+exit;
+
+// $result_array = json_decode($result, true);
 // //echo '感情数値：'.$result_array[documentSentiment][score];
-//   // echo file_get_contents($result_array);
-var_dump($result_array);
+// echo $result_array;
+// var_dump($result_array);
 // var_dump("hi ai");
 
 //for($i=0;$i<=count($result_array[tokens]);$i++){
